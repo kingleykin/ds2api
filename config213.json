@@ -1,0 +1,25 @@
+{
+  "api_keys": [
+    {
+      "key": "sk-my-ds2api-key",
+      "name": "My Local Key",
+      "remark": "Key để dùng với client (ví dụ: dùng trong code của bạn)"
+    }
+  ],
+  "accounts": [
+    {
+      "name": "Tài khoản DeepSeek 1",
+      "email": "dien_email_cua_ban_vao_day@example.com",
+      "password": "dien_mat_khau_vao_day"
+    }
+  ],
+  "model_aliases": {
+    "gpt-4o": "deepseek-v4-flash",
+    "gpt-5.5": "deepseek-v4-flash",
+    "o3": "deepseek-v4-pro"
+  },
+  "runtime": {
+    "account_max_inflight": 2,
+    "token_refresh_interval_hours": 6
+  }
+}

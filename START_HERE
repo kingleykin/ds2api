@@ -1,0 +1,46 @@
+Ran command: `cp config.example.json config.json`
+Viewed README.en.md:1-442
+
+Dựa vào tài liệu `README.en.md`, dưới đây là hướng dẫn các bước để bạn cài đặt và chạy hệ thống DS2API bằng Docker (tương ứng với **Option 2: Docker / GHCR**):
+
+### Bước 1: Chuẩn bị file cấu hình
+Hệ thống thấy bạn đã chạy lệnh `cp config.example.json config.json` thành công và đang mở file `config.json`. 
+- Hãy chỉnh sửa file `config.json` này và điền các thông tin cần thiết (như thông tin tài khoản DeepSeek của bạn, danh sách API keys được phép truy cập, v.v.).
+
+### Bước 2: Chuẩn bị file biến môi trường (Environment)
+Bạn cần copy file cấu hình môi trường mẫu:
+```bash
+cp .env.example .env
+```
+*(Bạn có thể mở file `.env` này để chỉnh sửa thêm nếu cần thiết, ví dụ như thay đổi cổng kết nối).*
+
+### Bước 3: Kéo image từ Github Container Registry
+Tải phiên bản mới nhất của ds2api về máy:
+```bash
+docker pull ghcr.io/cjackhwang/ds2api:latest
+```
+
+### Bước 4: Khởi chạy bằng Docker Compose
+Sau khi đã chuẩn bị xong cấu hình, khởi chạy container ở chế độ nền (detached mode):
+```bash
+docker-compose up -d
+```
+
+---
+
+### 💡 Một số lưu ý quan trọng:
+1. **Cổng truy cập (Port):** 
+   - Mặc định, file `docker-compose.yml` sẽ map cổng **`6011`** ở máy bạn (host) vào cổng `5001` của container.
+   - Khi đó, bạn có thể truy cập WebUI quản trị tại: `http://localhost:6011/admin`
+   - Nếu bạn muốn dịch vụ chạy trực tiếp trên cổng `5001` ở bên ngoài, hãy thiết lập biến môi trường `DS2API_HOST_PORT=5001` (bạn có thể ghi vào file `.env`).
+
+2. **Mount Volume:**
+   - File `config.json` mà bạn vừa tạo sẽ được tự động map vào bên trong container tại đường dẫn `/data/config.json`. Việc này giúp lưu trữ lại cấu hình (ví dụ như token đăng nhập) một cách an toàn mà không bị mất đi khi khởi động lại container.
+
+3. **Cập nhật phiên bản mới:**
+   - Nếu sau này có bản update mới, bạn chỉ cần tải lại image và chạy lệnh sau để cập nhật lại container:
+   ```bash
+   docker-compose up -d --build
+   ```
+
+Bạn có thể tiến hành nhập thông tin vào `config.json` theo Bước 1, sau đó chạy các lệnh từ Bước 2 trở đi để khởi động Docker nhé! Nếu gặp lỗi nào trong quá trình chạy, hãy báo lại để tôi hỗ trợ thêm.
