@@ -44,3 +44,38 @@ docker-compose up -d
    ```
 
 Bạn có thể tiến hành nhập thông tin vào `config.json` theo Bước 1, sau đó chạy các lệnh từ Bước 2 trở đi để khởi động Docker nhé! Nếu gặp lỗi nào trong quá trình chạy, hãy báo lại để tôi hỗ trợ thêm.
+
+Ran command: `cp .env.example .env`
+Edited START_HERE
+Viewed .env.example:1-21
+Searched for "(google|oauth|token|auth)"
+Searched for "(oauth|google|token|login)"
+Searched for "(token|oauth|google)"
+Searched for "(google|oauth|token)"
+Searched for "token_only|Token|Email|Mobile"
+
+Nếu bạn đăng nhập DeepSeek bằng Google (OAuth) thì bạn sẽ không có mật khẩu trực tiếp để khai báo vào `config.json`. 
+
+Trong trường hợp này, bạn phải lấy **Token (mã phiên đăng nhập)** thủ công từ trình duyệt để dùng. Bạn làm theo các bước sau nhé:
+
+### Bước 1: Lấy Token từ trình duyệt
+1. Mở trình duyệt và đăng nhập vào trang chủ chat của DeepSeek (chat.deepseek.com) bằng tài khoản Google của bạn.
+2. Nhấn phím `F12` (hoặc chuột phải chọn **Kiểm tra** / **Inspect**) để mở bảng dành cho Nhà phát triển (DevTools).
+3. Chuyển sang tab **Application** (hoặc tab **Network**).
+   - Nếu dùng **Application**: Nhìn cột bên trái, mở mục **Local Storage** > chọn trang DeepSeek. Tìm từ khóa `userToken` (hoặc token tương tự). Copy đoạn mã dài đó.
+   - Nếu dùng **Network**: Thử gõ một tin nhắn bất kỳ cho DeepSeek. Bấm vào một request (yêu cầu) vừa gửi đi, chuyển sang tab **Headers**, kéo xuống tìm mục `Authorization: Bearer <một-đoạn-mã-dài>`. Bạn copy `<một-đoạn-mã-dài>` đó.
+
+### Bước 2: Điền vào `config.json`
+Bạn mở lại file `config.json`, xóa dòng `email` và `password` đi, sau đó thay bằng dòng `"token"`. Đoạn `accounts` của bạn sẽ trông như thế này:
+
+```json
+  "accounts": [
+    {
+      "name": "Tài khoản DeepSeek Google",
+      "token": "dán_đoạn_mã_token_bạn_vừa_copy_vào_đây"
+    }
+  ],
+```
+
+### 💡 Lưu ý:
+Vì đây là token được trích xuất thủ công nên sau một khoảng thời gian dài (vài tuần hoặc khi bạn bị đăng xuất khỏi trình duyệt), token này có thể hết hạn. Khi đó DS2API sẽ báo lỗi đăng nhập, bạn chỉ cần lặp lại các bước trên để lấy token mới và thay vào là được.
